@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Para Susan 🌸</title>
+
+<style>
+:root{
+    --main-text: clamp(18px, 4vw, 30px);
+    --title-text: clamp(26px, 7vw, 38px);
+}
+
+body{
+    margin:0;
+    min-height:100dvh; /* Mejor que 100vh en Android */
+    background: radial-gradient(circle at top, #ffb6c1, #8b0033);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    overflow:hidden;
+    font-family:'Segoe UI', system-ui, sans-serif;
+    color:white;
+    text-align:center;
+}
+
+/* DEDICATORIA */
+.dedicatoria{
+    font-size:var(--title-text);
+    margin:12px 0;
+    font-weight:bold;
+    text-shadow:0 0 20px #ff9acb;
+}
+
+/* ESTRELLAS */
+.star{
+    position:absolute;
+    background:white;
+    border-radius:50%;
+    opacity:0.7;
+    animation: parpadear 3s infinite alternate;
+}
+@keyframes parpadear{
+    from{ opacity:0.3; }
+    to{ opacity:1; }
+}
+
+/* CORAZÓN */
+.heart{
+    position:relative;
+    width: min(80vw, 340px);
+    height: min(75vw, 320px);
+    animation: latido 1.5s infinite;
+}
+@keyframes latido{
+    0%{ transform:scale(1); }
+    50%{ transform:scale(1.1); }
+    100%{ transform:scale(1); }
+}
+
+.flower{
+    position:absolute;
+    font-size:clamp(18px, 4vw, 22px);
+    animation: brillo 2s infinite alternate;
+}
+@keyframes brillo{
+    from{ filter:drop-shadow(0 0 5px #fff); }
+    to{ filter:drop-shadow(0 0 14px #ff69b4); }
+}
+
+/* MENSAJE */
+.mensaje{
+    margin-top:20px;
+    font-size:var(--main-text);
+    line-height:1.4;
+    padding:0 12px;
+    text-shadow:0 0 15px #ff69b4;
+    max-width:95vw;
+}
+
+/* ICONOS MÉDICOS */
+.med{
+    position:absolute;
+    font-size:clamp(36px, 8vw, 55px);
+    animation: flotar 6s ease-in-out infinite;
+    opacity:0.9;
+}
+
+@keyframes flotar{
+    0%{ transform:translateY(0); }
+    50%{ transform:translateY(-20px); }
+    100%{ transform:translateY(0); }
+}
+
+/* PÉTALOS */
+.petalo{
+    position:absolute;
+    top:-20px;
+    font-size:20px;
+    animation: caer linear forwards;
+}
+@keyframes caer{
+    to{
+        transform:translateY(120dvh) rotate(360deg);
+        opacity:0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="dedicatoria">Para Susan 🌸</div>
+<div class="heart" id="heart"></div>
+<div class="mensaje" id="mensaje"></div>
+
+<script>
+// ESTRELLAS (menos cantidad para celulares)
+for(let i=0;i<50;i++){
+    let s=document.createElement("div");
+    s.className="star";
+    let size=Math.random()*3+1;
+    s.style.width=size+"px";
+    s.style.height=size+"px";
+    s.style.left=Math.random()*100+"vw";
+    s.style.top=Math.random()*100+"dvh";
+    document.body.appendChild(s);
+}
+
+// CORAZÓN
+const heart=document.getElementById("heart");
+for(let t=0;t<Math.PI*2;t+=0.09){
+    let x=16*Math.pow(Math.sin(t),3);
+    let y=13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t);
+
+    let f=document.createElement("div");
+    f.className="flower";
+    f.innerHTML="🌸";
+    f.style.left=(heart.offsetWidth/2 + x*8)+"px";
+    f.style.top=(heart.offsetHeight/2 - y*8)+"px";
+    heart.appendChild(f);
+}
+
+// ICONOS MÉDICOS
+const icons=["🩺","💊","🧠","🫀","🧬","🏥","💉","🩹"];
+icons.forEach((icon,i)=>{
+    let m=document.createElement("div");
+    m.className="med";
+    m.innerHTML=icon;
+
+    m.style.left = i%2===0 
+        ? (Math.random()*12)+"%" 
+        : (88+Math.random()*8)+"%";
+
+    m.style.top = (10 + Math.random()*80)+"%";
+    m.style.animationDelay=(i*0.6)+"s";
+
+    document.body.appendChild(m);
+});
+
+// TEXTO (optimizado para texto largo)
+const texto=`xD oie me gusta mucho que seas alguien estudiosa y dedicada :D, 
+eres una personita un poco reservada pero aun así yo sé que me estoy ganando tu confianza poquito a poquito :>, 
+hay cosas que quiero decir pero por ahora no creo que sea momento :c o tal vez no sé xd, 
+pero lo que sí sé es que debes estudiar mucho para aprobar ese examen y seguir tu carrera soñada. 
+Habrá cosas que afecten tu vida, pero no te detengas hasta lograr tu meta. 
+Tú sabes que sí puedes y los que te queremos también lo sabemos 💖`;
+
+let i=0;
+function escribir(){
+    if(i<texto.length){
+        document.getElementById("mensaje").innerHTML += texto.charAt(i);
+        i++;
+        setTimeout(escribir,45); // Más fluido en móvil
+    }
+}
+setTimeout(escribir,2000);
+
+// PÉTALOS (menos frecuencia para rendimiento)
+function petalos(){
+    let p=document.createElement("div");
+    p.className="petalo";
+    p.innerHTML="🌸";
+    p.style.left=Math.random()*100+"vw";
+    p.style.animationDuration=(5+Math.random()*4)+"s";
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(),9000);
+}
+setInterval(petalos,400);
+</script>
+
+</body>
+</html>
